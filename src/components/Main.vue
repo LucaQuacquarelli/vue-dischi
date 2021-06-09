@@ -1,5 +1,5 @@
 <template>
-    <main>
+    <main v-if="!loader">
         <div class="album-container">
             <Album v-for="(album,index) in albums" :key="index"
             :cover="album.poster"
@@ -8,21 +8,27 @@
             :year="album.year"/>
         </div>
     </main>
+    <div v-else class="loader">
+        <Loader/>
+    </div>
 </template>
 
 <script>
 import Album from './Album';
+import Loader from './Loader';
 import axios from 'axios';
 
 export default {
     name: "Main",
     components: {
-        Album
+        Album,
+        Loader
     },
     data: function() {
         return {
             apiUrl: "https://flynn.boolean.careers/exercises/api/array/music",
-            albums: []
+            albums: [],
+            loader: true
         }
     },
     created: function() {
@@ -31,6 +37,11 @@ export default {
             .then(
                 (response)=> {
                     this.albums = response.data.response
+                    setTimeout(
+                        () => {
+                            this.loader = false
+                        },3000)
+                    
                 }
             )
     }
@@ -51,5 +62,8 @@ export default {
             justify-content: center;
             flex-basis: 60%;
         }
+    }
+    .loader {
+        text-align: center;
     }
 </style>
