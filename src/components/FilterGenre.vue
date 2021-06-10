@@ -1,5 +1,8 @@
 <template>
-    <select name="genre" @change="$emit('findGenre', $event)">
+    <select name="genre"
+    v-model="selected"
+    @change="$emit('findGenre', selected)">
+        <option value="" disabled selected>Seleziona Genere</option>
         <option value="all">All</option>
         <option value="rock">Rock</option>
         <option value="pop">Pop</option>
@@ -11,6 +14,11 @@
 <script>
 export default {
     name: "FilterGenre",
+    data: function() {
+        return {
+            selected: ""
+        }
+    }
 }
 </script>
 

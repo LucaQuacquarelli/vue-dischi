@@ -1,8 +1,10 @@
 <template>
     <main v-if="!loader">
         <div class="filter-container">
-            <label for="genre">Seleziona un genere :</label>
-            <FilterGenre @findGenre="setGenre($event)"/>
+            <label for="genre">Genere :</label>
+            <FilterGenre @findGenre="setGenre"/>
+            <label for="Author">Autore :</label>
+            <FilterAuthor @findGenre="setGenre"/>
         </div>
         <div class="album-container">
             <Album v-for="(album,index) in filteredGenre" :key="index"
@@ -22,13 +24,15 @@ import Album from './Album';
 import Loader from './Loader';
 import axios from 'axios';
 import FilterGenre from './FilterGenre.vue'
+import FilterAuthor from './FilterAuthor.vue';
 
 export default {
     name: "Main",
     components: {
         Album,
         Loader,
-        FilterGenre
+        FilterGenre,
+        FilterAuthor
     },
     data: function() {
         return {
@@ -47,19 +51,15 @@ export default {
 
             const newArray = this.albums.filter(
                 (element) => {
-                    return element.genre
-                        .toLowerCase()
-                        .includes(
-                            this.sectionValue.toLowerCase()
-                        );
+                    return element.genre.toLowerCase().includes(this.sectionValue.toLowerCase()) || element.author.toLowerCase().includes(this.sectionValue.toLowerCase())
                 } 
             );
             return newArray;
         },
     },    
     methods: {
-        setGenre(event) {
-            this.sectionValue = event.target.value
+        setGenre(selected) {
+            this.sectionValue = selected
         }
     },
     created: function() {
