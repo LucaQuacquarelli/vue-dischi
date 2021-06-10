@@ -1,7 +1,11 @@
 <template>
     <main v-if="!loader">
+        <div class="filter-container">
+            <label for="genre">Seleziona un genere :</label>
+            <FilterGenre @findGenre="setGenre($event)"/>
+        </div>
         <div class="album-container">
-            <Album v-for="(album,index) in albums" :key="index"
+            <Album v-for="(album,index) in filteredGenre" :key="index"
             :cover="album.poster"
             :title="album.title"
             :author="album.author"
@@ -17,18 +21,45 @@
 import Album from './Album';
 import Loader from './Loader';
 import axios from 'axios';
+import FilterGenre from './FilterGenre.vue'
 
 export default {
     name: "Main",
     components: {
         Album,
-        Loader
+        Loader,
+        FilterGenre
     },
     data: function() {
         return {
             apiUrl: "https://flynn.boolean.careers/exercises/api/array/music",
             albums: [],
-            loader: true
+            loader: true,
+            sectionValue: ""
+        }
+    },
+    computed: {
+        filteredGenre: function() {
+
+            if (this.sectionValue == "all") {
+                return this.albums;
+            }
+
+            const newArray = this.albums.filter(
+                (element) => {
+                    return element.genre
+                        .toLowerCase()
+                        .includes(
+                            this.sectionValue.toLowerCase()
+                        );
+                } 
+            );
+            return newArray;
+        },
+    },    
+    methods: {
+        setGenre(event) {
+            this.sectionValue = event.target.value
         }
     },
     created: function() {
@@ -49,18 +80,31 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../style/variables';
     main {
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
         padding: 50px;
-        background-color: #1e2d3b;
+        background-color: $main-bg-color;
+
+        .filter-container {
+
+            margin: 10px 0;
+
+            label {
+                margin: 0 10px;
+                color: $font-white;
+            }
+
+        }
 
         .album-container {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            flex-basis: 60%;
+            padding: 0 250px;
         }
     }
     .loader {

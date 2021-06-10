@@ -38,7 +38,7 @@ export default {
 
         h4 {
             margin: 10px 0;
-            color: white;
+            color: $font-white;
         }   
 
         span {

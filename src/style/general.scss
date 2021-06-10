@@ -1,5 +1,5 @@
 @import "~@fontsource/raleway/400.css";
-
+@import '../style/variables';
 * {
     box-sizing: border-box;
     margin: 0;
@@ -8,5 +8,5 @@
 
 body {
     font-family: 'Raleway', sans-serif;
-    background-color: black;
+    background-color: $main-bg-color;
 }
